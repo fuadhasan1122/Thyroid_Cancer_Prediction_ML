@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Predictions</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/predict">Predict</a></li>
+            <li><a href="/view_predictions">View Predictions</a></li>
+        </ul>
+    </nav>
+    
+    <section class="section">
+        <h2>Prediction History</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Diabetes</th>
+                    <th>Obesity</th>
+                    <th>Family History</th>
+                    <th>Smoking</th>
+                    <th>Radiation</th>
+                    <th>Iodine Deficiency</th>
+                    <th>TSH</th>
+                    <th>T3</th>
+                    <th>T4</th>
+                    <th>Nodule Size</th>
+                    <th>Prediction</th>
+                    <th>Probability (%)</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pred in predictions %}
+                <tr>
+                    <td>{{ pred.id }}</td>
+                    <td>{{ pred.age }}</td>
+                    <td>{{ pred.gender }}</td>
+                    <td>{{ pred.diabetes }}</td>
+                    <td>{{ pred.obesity }}</td>
+                    <td>{{ pred.family_history }}</td>
+                    <td>{{ pred.smoking }}</td>
+                    <td>{{ pred.radiation_exposure }}</td>
+                    <td>{{ pred.iodine_deficiency }}</td>
+                    <td>{{ pred.tsh }}</td>
+                    <td>{{ pred.t3 }}</td>
+                    <td>{{ pred.t4 }}</td>
+                    <td>{{ pred.nodule_size }}</td>
+                    <td>{{ 'High Risk' if pred.prediction == 1 else 'Low Risk' }}</td>
+                    <td>{{ pred.probability }}</td>
+                    <td>{{ pred.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</body>
+</html>

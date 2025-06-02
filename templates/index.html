@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thyroid Cancer Prediction</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#predict">Predict</a></li>
+      <li><a href="/view_predictions">View Predictions</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Home Section -->
+  <section id="home" class="section">
+    <h1>Thyroid Cancer Prediction</h1>
+    <p>This website helps you predict the likelihood of thyroid cancer based on your health data.</p>
+  </section>
+
+ <section id="predict" class="section">
+    <h2>Thyroid Cancer Risk Prediction</h2>
+    <form id="prediction-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="age">Age:</label>
+          <input type="number" id="age" name="age" min="1" max="120" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="gender">Gender:</label>
+          <select id="gender" name="gender" required>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="diabetes">Diabetes:</label>
+          <select id="diabetes" name="diabetes" required>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="obesity">Obesity:</label>
+          <select id="obesity" name="obesity" required>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="family_history">Family History of Thyroid Cancer:</label>
+          <select id="family_history" name="family_history" required>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="smoking">Smoking:</label>
+          <select id="smoking" name="smoking" required>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="radiation_exposure">Radiation Exposure:</label>
+          <select id="radiation_exposure" name="radiation_exposure" required>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="iodine_deficiency">Iodine Deficiency:</label>
+          <select id="iodine_deficiency" name="iodine_deficiency" required>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="tsh">TSH Level (mIU/L):</label>
+          <input type="number" id="tsh" name="tsh" step="0.01" min="0" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="t3">T3 Level (ng/dL):</label>
+          <input type="number" id="t3" name="t3" step="0.01" min="0" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="t4">T4 Level (μg/dL):</label>
+          <input type="number" id="t4" name="t4" step="0.01" min="0" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="nodule_size">Thyroid Nodule Size (mm):</label>
+          <input type="number" id="nodule_size" name="nodule_size" step=  min="0" required>
+        </div>
+      </div>
+
+      <button type="submit">Assess Thyroid Cancer Risk</button>
+    </form>
+
+    <div id="prediction-result"></div>
+  </section>
+
+  <section id="about" class="section">
+    <h2>About This Tool</h2>
+    <p>This thyroid cancer risk assessment tool uses machine learning to evaluate your risk based on established clinical factors including:</p>
+    <ul>
+      <li>Demographic information (age, gender)</li>
+      <li>Medical history (diabetes, obesity)</li>
+      <li>Family history of thyroid cancer</li>
+      <li>Lifestyle factors (smoking)</li>
+      <li>Environmental exposures (radiation)</li>
+      <li>Thyroid function tests (TSH, T3, T4)</li>
+      <li>Thyroid nodule characteristics</li>
+    </ul>
+    <p>The algorithm was developed using clinical data and validated against established medical guidelines.</p>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="section">
+    <h2>About Us</h2>
+    <p>We are a team of healthcare professionals and data scientists dedicated to helping people predict and understand thyroid cancer risks.</p>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section">
+    <h2>Contact Us</h2>
+    <form id="contact-form">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="message">Message:</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+
+      <button type="submit">Send</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Thyroid Cancer Prediction. All rights reserved.</p>
+  </footer>
+
+  <!-- JS -->
+ <script>
+    document.getElementById('prediction-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      
+      // Show loading state
+      const resultDiv = document.getElementById('prediction-result');
+      resultDiv.innerHTML = '<div class="loading">Analyzing your data... <div class="spinner"></div></div>';
+      
+      // Get all form values
+      const formData = {
+        age: document.getElementById('age').value,
+        gender: document.getElementById('gender').value,
+        diabetes: document.getElementById('diabetes').value,
+        obesity: document.getElementById('obesity').value,
+        family_history: document.getElementById('family_history').value,
+        smoking: document.getElementById('smoking').value,
+        radiation_exposure: document.getElementById('radiation_exposure').value,
+        iodine_deficiency: document.getElementById('iodine_deficiency').value,
+        tsh: document.getElementById('tsh').value,
+        t3: document.getElementById('t3').value,
+        t4: document.getElementById('t4').value,
+        nodule_size: document.getElementById('nodule_size').value
+      };
+
+      // Validate all fields are filled
+      if (Object.values(formData).some(val => val === '')) {
+        resultDiv.innerHTML = '<p style="color: red;">Please fill in all fields before submitting.</p>';
+        return;
+      }
+
+      try {
+        // Send data to server
+        const response = await fetch('/predict', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Unable to process your request');
+        }
+
+         // Display results in separate cards
+        if (data.prediction === 1) {
+          resultDiv.innerHTML = `
+            <div class="card-container">
+              <div class="card risk-high">
+                <h3>Risk Status</h3>
+                <p><strong>🛑 High Risk Detected</strong></p>
+              </div>
+              <div class="card probability">
+                <h3>Probability</h3>
+                <p><strong>${data.probability}%</strong></p>
+              </div>
+              <div class="card recommendations">
+                <h3>Recommendations</h3>
+                <p>Based on your inputs, you may be at elevated risk for thyroid cancer. We strongly recommend:</p>
+                <ul>
+                  <li>Consulting with an endocrinologist</li>
+                  <li>Undergoing a thyroid ultrasound</li>
+                  <li>Getting a fine needle aspiration biopsy if nodules are present</li>
+                </ul>
+                <p>This assessment is not a diagnosis. Please see a healthcare professional for proper evaluation.</p>
+              </div>
+            </div>
+          `;
+        } else {
+          resultDiv.innerHTML = `
+            <div class="card-container">
+              <div class="card risk-low">
+                <h3>Risk Status</h3>
+                <p><strong>✅ Low Risk of Thyroid Cancer</strong></p>
+              </div>
+              <div class="card probability">
+                <h3>Probability</h3>
+                <p><strong>${data.probability}%</strong></p>
+              </div>
+              <div class="card recommendations">
+                <h3>Recommendations</h3>
+                <p>Based on your inputs, you appear to have low risk for thyroid cancer. However, we recommend:</p>
+                <ul>
+                  <li>Regular thyroid checkups if you have risk factors</li>
+                  <li>Monitoring for any neck lumps or changes</li>
+                  <li>Maintaining a healthy lifestyle to reduce cancer risks</li>
+                </ul>
+                <p>This assessment is not a guarantee. Regular checkups are important for everyone.</p>
+              </div>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        resultDiv.innerHTML = `
+          <p style="color: red;">Error: ${error.message}</p>
+          <p>Please try again or contact support if the problem persists.</p>
+        `;
+      }
+    });
+
+    // Simple contact form handler
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Thank you for your message! Our medical team will respond within 2 business days.');
+      this.reset();
+    });
+
+    // Add input validation for nodule size
+    document.getElementById('nodule_size').addEventListener('change', function() {
+      const size = parseFloat(this.value);
+      if (size < 0) {
+        this.value = 0;
+      }
+    });
+  </script>
+</body>
+</html>

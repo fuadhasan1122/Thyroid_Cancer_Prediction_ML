@@ -1,0 +1,162 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: #333;
+}
+
+nav {
+    background: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+.section {
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 1200px; /* Kept from your second version for table and cards */
+}
+
+.section h1, .section h2 {
+    color: #444;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    margin: 10px 0 5px;
+}
+
+form input, form select, form textarea, form button {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    background: #333;
+    color: #fff;
+    cursor: pointer;
+}
+
+form button:hover {
+    background: #555;
+}
+
+footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 20px;
+}
+
+#prediction-result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background: #333;
+    color: #fff;
+}
+
+table tr:nth-child(even) {
+    background: #f8f8f8;
+}
+
+/* Card styles for prediction results */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+    margin: 0 0 10px;
+    color: #333;
+}
+
+.card p {
+    margin: 0;
+}
+
+.card strong {
+    font-size: 1.2em;
+}
+
+.risk-high {
+    background: #ffe6e6;
+    border-color: #ff6666;
+}
+
+.risk-low {
+    background: #e6ffe6;
+    border-color: #66cc66;
+}
+
+.probability {
+    background: #e6f3ff;
+    border-color: #3399ff;
+}
+
+.recommendations {
+    text-align: left;
+}
+
+.recommendations ul {
+    padding-left: 20px;
+}
