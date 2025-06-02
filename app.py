@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify, render_template
 import pickle
 import numpy as np
-import mysql.connector
-from mysql.connector import Error
+import psycopg2
+from psycopg2 import Error
+import os
 
 app = Flask(__name__)
 
@@ -10,13 +11,14 @@ app = Flask(__name__)
 with open('thyroid_model(2).pkl', 'rb') as f:
     model = pickle.load(f)
 
-# MySQL Database Configuration
-db_config = {
-    'host': 'localhost',
-    'database': 'thyroid_cancer_db',
-    'user': 'root',  # Default XAMPP MySQL user (update if different)
-    'password': ''    # Default XAMPP MySQL password (update if set)
-}
+# Database Configuration using Environment Variables
+def get_db_connection():
+    return psycopg2.connect(
+        host=os.getenv('DB_HOST'),
+        database=os.getenv('DB_NAME'),
+        user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASS')
+    )
 
 # Clinical decision thresholds
 LOW_RISK_THRESHOLD = 0.15  # 15% probability
@@ -24,15 +26,15 @@ HIGH_RISK_THRESHOLD = 0.35  # 35% probability
 
 def save_to_database(data, prediction, probability):
     try:
-        connection = mysql.connector.connect(**db_config)
+        connection = get_db_connection()
         cursor = connection.cursor()
         
         query = """
         INSERT INTO predictions (
             age, gender, diabetes, obesity, family_history, smoking, 
             radiation_exposure, iodine_deficiency, tsh, t3, t4, 
-            nodule_size, prediction, probability
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            nodule_size, prediction, probability, created_at
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         values = (
             int(data['age']),
@@ -48,7 +50,8 @@ def save_to_database(data, prediction, probability):
             float(data['t4']),
             float(data['nodule_size']),
             int(prediction),
-            float(probability)
+            float(probability),
+            'now()'
         )
         
         cursor.execute(query, values)
@@ -59,7 +62,7 @@ def save_to_database(data, prediction, probability):
         print(f"Error saving to database: {e}")
         
     finally:
-        if connection.is_connected():
+        if connection:
             cursor.close()
             connection.close()
 
@@ -134,11 +137,13 @@ def predict():
 @app.route('/view_predictions', methods=['GET'])
 def view_predictions():
     try:
-        connection = mysql.connector.connect(**db_config)
-        cursor = connection.cursor(dictionary=True)
-        
+        connection = get_db_connection()
+        cursor = connection.cursor()
         cursor.execute("SELECT * FROM predictions ORDER BY created_at DESC")
-        predictions = cursor.fetchall()
+        predictions = []
+        columns = [desc[0] for desc in cursor.description]
+        for row in cursor.fetchall():
+            predictions.append(dict(zip(columns, row)))
         
         cursor.close()
         connection.close()
@@ -150,4 +155,4 @@ def view_predictions():
         return jsonify({'error': str(e), 'status': 'error'}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)))
