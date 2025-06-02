@@ -72,6 +72,9 @@ def home():
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    with open('thyroid_model(2).pkl', 'rb') as f:
+        model = pickle.load(f)
+
     try:
         # Get data from request
         data = request.get_json()
